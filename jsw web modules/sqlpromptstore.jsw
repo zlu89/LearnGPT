@@ -1,0 +1,28 @@
+import { sql } from '@velo/wix-data-sql-backend';
+
+export async function getAllTasks(userid) {
+    try {
+        const results = await sql('SELECT * FROM UserPrompts Where user = "' + userid + '"');
+        return results.payload.data.rows;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function insertTask(userid,pro,resp) {
+    try {
+        await sql('INSERT INTO UserPrompts (user, prompt , response) VALUES ("' + userid + '" , "' + pro + '" , "' + resp + '")');
+    } catch (error) {
+        console.error(error);
+    }
+}
+// this function is different from the previous ones as it returns a promise
+// this is done in order to allow calling it several times without waiting to each call to complete
+export function removeTask(taskID,pro) {
+    try {
+        const removePromise = sql('DELETE FROM UserPrompts WHERE user = "' + taskID + '" and prompt =  "' + pro  + '"');
+        return removePromise;
+    } catch (error) {
+        console.error(error);
+    }
+}
