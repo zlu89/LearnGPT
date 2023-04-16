@@ -1,0 +1,10 @@
+import {sendWithService} from 'backend/sendGrid';
+import wixSecretsBackend from 'wix-secrets-backend';
+
+export async function sendEmail(subject, body,email,name) {
+  const sendGridSecret = JSON.parse(await wixSecretsBackend.getSecret('Sendgridsecret'));
+  const key = sendGridSecret.key;
+  const sender = sendGridSecret.senderEmail; 
+  const recipient =email;
+  return sendWithService(key, sender, recipient, subject, body,name);
+}
