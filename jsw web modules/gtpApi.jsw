@@ -1,7 +1,9 @@
 import { fetch } from 'wix-fetch';
+import wixSecretsBackend from 'wix-secrets-backend';
 
 export async function generateText(prompt) {
-  const apiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+    const sendGridSecret = JSON.parse(await wixSecretsBackend.getSecret('ChatGPTAPIKEY'));
+  const apiKey = sendGridSecret.key;
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
   
   const response = await fetch(apiUrl, {
@@ -22,5 +24,4 @@ export async function generateText(prompt) {
   const result = await response.json();
   return result.choices[0].text.trim();
 }
-
 
