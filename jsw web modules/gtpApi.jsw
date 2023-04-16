@@ -1,0 +1,26 @@
+import { fetch } from 'wix-fetch';
+
+export async function generateText(prompt) {
+  const apiKey = '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';
+  const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
+  
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      prompt: prompt,
+      max_tokens: 100,
+      n: 1,
+      stop: null,
+      temperature: 0.5
+    })
+  });
+
+  const result = await response.json();
+  return result.choices[0].text.trim();
+}
+
+
