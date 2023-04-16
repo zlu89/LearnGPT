@@ -1,7 +1,7 @@
 //import { generateText } from '@herbylegall9/gptapi-backend';
 import { generateText } from 'backend/gtpApi'
 import { authentication, currentMember } from 'wix-members';
-
+import wixLocation from 'wix-location';
 import { getAllTasks, insertTask, removeTask } from 'backend/sqlpromptstore';
 var globalid = ""
 var fullName = ""
@@ -75,3 +75,8 @@ async function storeprompt() {
         console.error(error);
     }
 }
+
+authentication.onLogin((user)=>{
+    wixLocation.to("/");
+    }
+)
