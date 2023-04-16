@@ -1,6 +1,7 @@
 import { getAllTasks, insertTask, updateTask, removeTask, getAll } from 'backend/graph';
 import { local } from 'wix-storage';
 import { authentication, currentMember } from 'wix-members';
+import wixLocation from 'wix-location';
 import { generateText } from 'backend/gtpApi'
 import {getprompt} from   'backend/promptget';
 
@@ -17,6 +18,7 @@ $w.onReady(async function () {
     registerHandlers();
     fetchData();
     getLogin();
+    getgpttable();
     getgptPrompt();
    // updateData(userid) ;
 });
@@ -34,7 +36,7 @@ if(!guessedcheck){
      let response = await generateText("on a scale from 1-10 how close are these two sentences: '" + $w('#input1').value +"' and '"+currentinput+ "'in less than 3 words and as a decimal numerical result");
           //  $w('#text28').text = response;
             numericacloseness=response;
-      console.log(response)
+			console.log(response)
       let currentnum=response
 //      let numericallist=["0","1","2","3","4","5","6","7","8","9"]
  //     for (var i=0;i<response.length;i++) {
@@ -65,7 +67,9 @@ console.log("Nice, accourding to chatgpt, your guess has a sameness score of "+c
                $w('#text32').text = "Feedback: You have already guessed for this response! Please move onto the next one"
       
         } 
-        let topic2 = await getAll()
+
+        
+      	let topic2 = await getAll()
             console.log(topic2)
                   var myTableData = []
     for (var i=0;i<10; i++) {
@@ -79,7 +83,19 @@ console.log("Nice, accourding to chatgpt, your guess has a sameness score of "+c
      catch (error) {
         console.error(error);
     }}
+async function getgpttable(){
 
+      	let topic2 = await getAll()
+            console.log(topic2)
+                  var myTableData = []
+    for (var i=0;i<10; i++) {
+      myTableData.push(
+  {"rank": (i+1).toLocaleString('en'), "user": topic2[i].Name, "score":topic2[i].score.toLocaleString('en')}
+);
+    }
+   console.log(myTableData)
+       $w('#table1').rows = myTableData;
+}
 async function getgptPrompt(){
     console.log("testing here")
     try {
@@ -126,7 +142,7 @@ console.log(fullName)
  // console.log("Welcome " + fullName +"happy")
 
 
-        let topic2 = await getAll()
+      	let topic2 = await getAll()
             console.log(topic2)
                   var myTableData = []
     for (var i=0;i<10; i++) {
@@ -136,7 +152,7 @@ console.log(fullName)
     }
    console.log(myTableData)
        $w('#table1').rows = myTableData;
-        //   let topic = await getAllTasks($w('#input1').value)
+		  	//   let topic = await getAllTasks($w('#input1').value)
             let topic = await getAllTasks(globalid)
      
             if(topic.length==0){
@@ -166,4 +182,7 @@ async function getLogin() {
   });
 }
 
-
+authentication.onLogin((user)=>{
+    wixLocation.to("/");
+    }
+)
