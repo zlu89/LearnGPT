@@ -1,7 +1,7 @@
 import { fetch } from 'wix-fetch';
 
 export async function generateText(prompt) {
-  const apiKey = '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';
+  const apiKey = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
   
   const response = await fetch(apiUrl, {
