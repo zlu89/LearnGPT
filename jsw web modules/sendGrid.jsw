@@ -1,0 +1,35 @@
+import {fetch} from 'wix-fetch'; 
+
+export function sendWithService(APIKey, Sender, RecipientEmail, Subject, body,name) {
+	const url = "https://api.sendgrid.com/v3/mail/send";
+		
+	const MyHeaders = {
+		"Authorization": "Bearer " + APIKey,
+		"Content-Type": "application/json"
+	};
+	const MyBody = {
+		"personalizations": [{
+			"to": [{
+				"email": RecipientEmail
+			}],
+  "dynamic_template_data":{"firstName":name}
+		}],
+		"from": {
+			"email": Sender
+		},
+		"subject": Subject,
+		"content": [{
+			"type": "text/html",
+			"value": body
+		}],
+
+		"template_id" : "d-aef4e14cd73c4fecaaea11615246dbec"
+	};
+
+	return fetch(url, {
+			"method": "POST",
+			"headers": MyHeaders,
+			"body": JSON.stringify(MyBody)
+		})
+		.then(Response => Response.text);		
+}
