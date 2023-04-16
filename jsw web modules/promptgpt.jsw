@@ -1,0 +1,11 @@
+import { sql } from '@velo/wix-data-sql-backend';
+
+export async function getprompt() {
+    try {
+        const results = await sql('SELECT * FROM chatgptprompts');
+        return results.payload.data.rows;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
